@@ -25,7 +25,7 @@ const Form = () => {
   }
   const handleSubmit = (e) => {
       e.preventDefault()
-      dispatch({type: 'ADD_USER', payload: newUser})
+      dispatch({type: 'ADD_REQUEST', payload: newUser})
       alert ("sus datos fueron cargados correctamente")
   }
 return (

@@ -1,40 +1,31 @@
-import React, { useReducer, reducer } from "react";
+import React,{ useEffect, useState}from 'react'
 import { Link } from 'react-router-dom'
 
-const Card = ({ name, username, id }) => {
-
-  const initialState = {
-    dentistas: [
-      { name: "Gerardo HuevosLargos",userName: "Gerardo",id: 1 },
-      { name: "Marcela AgachateYConocela",userName: "Marcela",id: 2 },
-      { name: "Greogrio DelOjoGiratorio",userName: "Gregorio",id: 3 },
-      { name: "Victor Gutierrez",userName: "Victor",id: 4 },
-      { name: "Paola Nobile",userName: "Paola",id: 5 },
-      { name: "Sabrina Pena",userName: "Sabrina",id: 6 },
-    ],
-  }
-
-  const enlace = [
-    {titulo: 'Detail', route: '/recipe/:id'} 
-  ]
-
-  
-  const [state] = useReducer (reducer, initialState)
-  
-  
+const Card = () => {
+    
+  const [lista, setLista] = useState([])
+  const url = 'https://jsonplaceholder.typicode.com/users'
+  useEffect(() => {
+    fetch (url).then((res) => {
+      return res.json()
+    }).then((data) => {
+      setLista (data)
+    })
+  },[])
+    
   const addFav = ()=>{
     // Aqui iria la logica para agregar la Card en el localStorage
   }
 
   return (
     <div style={{display: 'flex', justifyContent: 'center'}} className="card">
-        {state.dentistas.map(dentista => (
-          <Link to={enlace.route} key={id}>
+        {lista.map(user => (
+          <Link to={url + user.id} key={user.id}>
                 <div style={{margin: 25}} >
                 <img src={require("../img/doctor.jpg")} alt="Card" width={200}/>
-                <p>id: {dentista.id}</p>
-                <p>Nombre y apellido: {dentista.name}</p>
-                <p>nombre: {dentista.userName}</p>      
+                <p>id: {user.id}</p>
+                <p>Nombre y apellido: {user.name}</p>
+                <p>nombre: {user.userName}</p>      
               </div>
               <div style={{display: 'flex', justifyContent: 'center'}}>
                 <button onClick={addFav} className="favButton">⭐</button>
