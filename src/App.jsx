@@ -1,4 +1,5 @@
 
+import './App.css';
 import { Route, Routes } from 'react-router-dom'
 import Navbar from "./Components/Navbar";
 import Home from "./Routes/Home";
@@ -6,6 +7,7 @@ import Contact from './Routes/Contact';
 import Detail from "./Routes/Detail";
 import Favs from "./Routes/Favs"
 import Footer from "./Components/Footer";
+
 
 
 function App() {

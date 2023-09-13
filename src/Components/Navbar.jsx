@@ -7,7 +7,7 @@ const Navbar = () => {
   
   const enlaces = [
     {titulo: 'Home', route: '/'}, 
-    {titulo: 'Detail', route: '/recipe/:id'}, 
+    //{titulo: 'Detail', route: '/recipe/:id'}, 
     {titulo: 'favs', route: '/favs'},
     {titulo: 'Contact', route: '/contact'}
   ]
