@@ -1,29 +1,29 @@
-import { Link } from 'react-router-dom'
-import { useOdontoStates } from '../Context/Context';
+import { Link } from "react-router-dom";
+import { setFavorite, isFav, removeFavorite } from "../Context/localStorage.service";
 
-const Card = ({odontologo}) => {
+const Card = ({ name, username, id }) => {
+  const addFav = () => {
+    setFavorite({ name, username, id });
+  };
 
-  const {favs, setFavs} = useOdontoStates()
-  console.log({favs});
+  const deleteFav = () => {
+    removeFavorite(id); 
+  };
+
+  const fav = isFav(id);
+
   return (
-        <div>
-          <div style={{display: 'flex', justifyContent: 'center'}} className="card">
-            <Link to={`/recipe/`+ odontologo.id}>
-                <img src={require("../img/doctor.jpg")} alt="Card" width={200}/>
-                <p>id: {odontologo.id}</p>
-                <p>Nombre y apellido: {odontologo.name}</p>
-                <p>nombre: {odontologo.username}</p>       
-            </Link> 
-            </div>
-            <div style={{display: 'flex', justifyContent: 'center'}}>
-              <button onClick={()=> setFavs([...favs, odontologo])} className="favButton">⭐</button>
-            </div>
-          {/* No debes olvidar que la Card a su vez servira como Link hacia la pagina de detalle */}
-
-          {/* Ademas deberan integrar la logica para guardar cada Card en el localStorage */}
-          
-        </div>  
-    );
+    <div className={`card`}>      
+      <div>
+      <Link to={`/recipe/`+ id}>
+        <img src={require("../img/doctor.jpg")} alt="Card" width={200}/>
+          <h2>{name}</h2>       
+          <h4>{username}</h4>
+         </Link>
+        <button className="btn-add-fav" onClick={fav ? deleteFav : addFav}> ⭐ </button>
+      </div>
+    </div>
+  );
 };
 
 export default Card;

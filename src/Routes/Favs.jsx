@@ -1,18 +1,31 @@
+import { useContext } from "react";
 import React from "react";
-import { useOdontoStates } from "../Context/Context";
 import Card from "../Components/Card";
-
-//Este componente debera ser estilado como "dark" o "light" dependiendo del theme del Context
+import { getFav } from "../Context/localStorage.service";
+import { ContextGlobal } from "../Context/Context";
 
 const Favs = () => {
-  const {favs} = useOdontoStates()
-
-
+  const { theme } = useContext(ContextGlobal);
+  const darkMode = theme === "dark" || false;
+  const localFavs = getFav();
 
   return (
-    <div>
-      {favs.map(fav => <Card odontologo={fav} key={fav.id}/>)}
-    </div>
+    <>
+      <div
+        className={`${
+          darkMode ? "navbar-dark bg-dark" : "navbar-light bg-light"
+        }`}
+      >
+        <h1>Favoritos</h1>
+        <div className="card-grid container">
+          {localFavs.length
+            ? localFavs.map((favoriteDentist) => (
+                <Card {...favoriteDentist} key={favoriteDentist.id} />
+              ))
+            : null}
+        </div>
+      </div>
+    </>
   );
 };
 

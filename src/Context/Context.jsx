@@ -1,34 +1,39 @@
-import axios from 'axios'
-import {useContext, createContext, useState, useEffect} from 'react'
+import { createContext, useEffect, useMemo, useReducer } from "react";
+import { actions, initialState, reducer } from "./reducer.service";
 
-const OdontoStates = createContext()
+export const ContextGlobal = createContext(undefined);
 
-const localFavs = JSON.parse(localStorage.getItem('favs'))
-const initialFavState = localFavs ? localFavs : []
+export const ContextProvider = ({ children }) => {
+const [state, dispatch] = useReducer(reducer, initialState);  
 
-const Context = ({children}) => {
-    const [odontologos, setOdontologos] = useState([])
-    const [favs, setFavs] = useState(initialFavState)
-    //const [theme, setTheme] = useState(true)
-    
-    const url = `https://jsonplaceholder.typicode.com/users`
+  const providerState = useMemo(
+    () => ({
+      data: state.data,
+      theme: state.theme,
+      setData: (item) => {
+        dispatch({ type: actions.setData, payload: item });
+      },
+      setDarkTheme: () => {
+        dispatch({ type: actions.setThemeDark });
+      },
+      setLightTheme: () => {
+        dispatch({ type: actions.themeLight });
+      },
+    }),
+    [state, dispatch]
+  );
 
-    useEffect(() => {
-        axios(url)
-        .then(res => setOdontologos(res.data))
-    }, [])
+  useEffect(() => {
+    if (providerState.data.length === 0) {
+      fetch("https://jsonplaceholder.typicode.com/users")
+        .then((res) => res.json())
+        .then((data) => providerState.setData(data));
+    }
+  }, [providerState]);
 
-    useEffect(() => {
-        localStorage.setItem('favs', JSON.stringify(favs))
-    },[favs])
-   
-    return (
-        <OdontoStates.Provider value={{odontologos, favs, setFavs}}>
-            {children}
-        </OdontoStates.Provider>
-    )
-}
-
-export default Context
-
-export const useOdontoStates = () => useContext(OdontoStates)
+  return (
+    <ContextGlobal.Provider value={providerState}>
+      {children}
+    </ContextGlobal.Provider>
+  );
+};
